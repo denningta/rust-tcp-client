@@ -3,6 +3,8 @@ use std::net::TcpStream;
 use std::thread;
 use std::time::Duration;
 
+mod connection;
+
 fn send_and_listen(address: &str) -> io::Result<()> {
     // Connect to the server at the specified address
     let mut stream = TcpStream::connect(address)?;
@@ -64,8 +66,12 @@ fn send_and_listen(address: &str) -> io::Result<()> {
 fn main() {
     let address = "192.168.1.240:65432"; // Example IP and port
 
-    // Handle errors in communication
-    if let Err(e) = send_and_listen(address) {
-        eprintln!("Failed to communicate: {}", e);
+    if let Err(e) = connection::tcp::message_loop(address) {
+        eprintln!("Failed to run message loop: {}", e);
     }
+
+    // Handle errors in communication
+    // if let Err(e) = send_and_listen(address) {
+    //     eprintln!("Failed to communicate: {}", e);
+    // }
 }
